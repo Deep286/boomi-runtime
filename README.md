@@ -17,101 +17,160 @@ This template provides a clean, minimal deployment solution for Boomi Molecule r
 
 ## Architecture
 
-The following diagram illustrates the overall architecture and deployment flow of the Boomi Runtime Template:
+The following diagram illustrates the comprehensive architecture and deployment flow of the Boomi Runtime Template:
 
 ```mermaid
-graph TB
-    subgraph "CI/CD Pipeline"
-        A[GitLab Repository] --> B[Build Stage]
-        B --> C[Test & Validate]
-        C --> D[Deploy Dev]
-        D --> E[Deploy Staging]
-        E --> F[Deploy Production]
+flowchart TB
+    subgraph "Development Workflow"
+        DEV[Developer] --> GIT[Git Repository<br/>boomi-runtime-template]
+        GIT --> PIPELINE[GitLab CI/CD Pipeline]
     end
 
-    subgraph "Kubernetes Cluster"
+    subgraph "CI/CD Pipeline Stages"
+        PIPELINE --> BUILD[Build Stage<br/>Docker Image Build]
+        BUILD --> TEST[Test Stage<br/>YAML Validation<br/>K6 Performance Tests]
+        TEST --> DEPLOY_DEV[Deploy Dev<br/>Manual Approval]
+        TEST --> DEPLOY_STAGE[Deploy Staging<br/>Manual Approval]
+        TEST --> DEPLOY_PROD[Deploy Production<br/>Manual Approval]
+    end
+
+    subgraph "Container Registry"
+        BUILD --> REGISTRY[Docker Registry<br/>boomi/molecule:latest<br/>+ Custom Images]
+    end
+
+    subgraph "Kubernetes Cluster Infrastructure"
         subgraph "Development Environment"
-            G[boomi-dev namespace]
-            H[Deployment: boomi-molecule-dev<br/>CPU: 250m/500m<br/>Memory: 2Gi/4Gi]
-            I[Service: ClusterIP<br/>Ports: 80, 8080, 1099]
-            J[PVC: boomi-storage<br/>10Gi]
-            K[ServiceAccount]
-            G --> H
-            G --> I
-            G --> J
-            G --> K
+            NS_DEV[Namespace: boomi-dev]
+            SA_DEV[ServiceAccount<br/>boomi-molecule-dev-sa]
+            PVC_DEV[PVC: 10Gi<br/>boomi-storage]
+            
+            subgraph "Dev Workload"
+                DEPLOY_DEV_K8S[Deployment<br/>boomi-molecule-dev<br/>1 replica<br/>CPU: 250m-500m<br/>Memory: 2Gi-4Gi]
+                SVC_DEV[Service<br/>ClusterIP<br/>Ports: 80,8080,1099]
+                HPA_DEV[HPA<br/>Min: 1, Max: 3<br/>CPU: 70%, Mem: 80%]
+            end
         end
 
         subgraph "Staging Environment"
-            L[boomi-staging namespace]
-            M[Deployment: boomi-molecule-staging<br/>Replicas: 2<br/>Production-like resources]
-            N[Service: ClusterIP]
-            O[PVC: boomi-storage]
-            L --> M
-            L --> N
-            L --> O
+            NS_STAGE[Namespace: boomi-staging]
+            SA_STAGE[ServiceAccount<br/>boomi-molecule-staging-sa]
+            PVC_STAGE[PVC: 10Gi<br/>boomi-storage]
+            
+            subgraph "Staging Workload"
+                DEPLOY_STAGE_K8S[Deployment<br/>boomi-molecule-staging<br/>2 replicas<br/>CPU: 500m-1000m<br/>Memory: 4Gi-6Gi]
+                SVC_STAGE[Service<br/>ClusterIP<br/>Ports: 80,8080,1099]
+                HPA_STAGE[HPA<br/>Min: 2, Max: 5<br/>CPU: 70%, Mem: 80%]
+            end
         end
 
         subgraph "Production Environment"
-            P[boomi-production namespace]
-            Q[Deployment: boomi-molecule-production<br/>Replicas: 3<br/>Full resources]
-            R[Service: ClusterIP]
-            S[PVC: boomi-storage]
-            P --> Q
-            P --> R
-            P --> S
+            NS_PROD[Namespace: boomi-production]
+            SA_PROD[ServiceAccount<br/>boomi-molecule-prod-sa]
+            PVC_PROD[PVC: 10Gi<br/>boomi-storage]
+            
+            subgraph "Production Workload"
+                DEPLOY_PROD_K8S[Deployment<br/>boomi-molecule-prod<br/>3 replicas<br/>CPU: 1000m-2000m<br/>Memory: 8Gi-12Gi]
+                SVC_PROD[Service<br/>ClusterIP<br/>Ports: 80,8080,1099]
+                HPA_PROD[HPA<br/>Min: 3, Max: 10<br/>CPU: 70%, Mem: 80%]
+            end
         end
     end
 
-    subgraph "Container Components"
-        T[Boomi Molecule Container<br/>Port 9090: HTTP API<br/>Port 8080: Web UI<br/>Port 1099: JMX Metrics]
-        U[JMX Prometheus Agent<br/>Metrics Export]
-        V[Health Checks<br/>Liveness & Readiness]
-        W[Node Offboard Script<br/>Cleanup on termination]
-        T --> U
-        T --> V
-        T --> W
+    subgraph "Container Runtime Features"
+        POD[Boomi Molecule Pod]
+        HEALTH[Health Checks<br/>Liveness: /_admin/liveness<br/>Readiness: /_admin/readiness]
+        JMX[JMX Agent<br/>Prometheus Export<br/>Port: 1099]
+        CLEANUP[Cleanup Script<br/>node_offboard.sh<br/>PreStop Hook]
+        STORAGE_MOUNT[Volume Mount<br/>/mnt/boomi]
     end
 
-    subgraph "External Dependencies"
-        X[Boomi Platform API<br/>api.boomi.com]
-        Y[Container Registry<br/>Docker Hub / Private]
-        Z[Monitoring System<br/>Prometheus/Grafana]
-        AA[Performance Testing<br/>K6 Framework]
+    subgraph "External Integrations"
+        BOOMI_API[Boomi Platform API<br/>api.boomi.com<br/>Account Management<br/>Process Deployment]
+        PROMETHEUS[Monitoring Stack<br/>Prometheus<br/>Grafana Dashboard]
+        K6_TEST[Performance Testing<br/>K6 Load Tests<br/>Health Endpoint Validation]
     end
 
-    subgraph "Configuration & Secrets"
-        BB[Kubernetes Secrets<br/>BOOMI_ACCOUNTID<br/>BOOMI_ATOMNAME<br/>INSTALL_TOKEN<br/>API Credentials]
-        CC[ConfigMaps<br/>JMX Configuration<br/>Template Values]
-        DD[Environment Specs<br/>Jsonnet Configuration]
+    subgraph "Configuration Management"
+        SECRETS[Kubernetes Secrets<br/>BOOMI_ACCOUNTID<br/>BOOMI_ATOMNAME<br/>INSTALL_TOKEN<br/>API_CREDENTIALS]
+        CONFIG[ConfigMaps<br/>JMX Configuration<br/>Application Settings]
+        YAML_MANIFESTS[YAML Manifests<br/>Ready-to-Deploy<br/>Environment Specific]
+        JSONNET[Jsonnet Templates<br/>Dynamic Generation<br/>DRY Configuration]
     end
 
-    H --> T
-    M --> T
-    Q --> T
-    T --> X
-    B --> Y
-    U --> Z
-    AA --> H
-    BB --> H
-    BB --> M
-    BB --> Q
-    CC --> H
-    CC --> M
-    CC --> Q
-    DD --> H
-    DD --> M
-    DD --> Q
+    %% Connections
+    DEPLOY_DEV --> NS_DEV
+    DEPLOY_STAGE --> NS_STAGE  
+    DEPLOY_PROD --> NS_PROD
+    
+    REGISTRY --> DEPLOY_DEV_K8S
+    REGISTRY --> DEPLOY_STAGE_K8S
+    REGISTRY --> DEPLOY_PROD_K8S
+    
+    NS_DEV --> SA_DEV
+    NS_DEV --> PVC_DEV
+    SA_DEV --> DEPLOY_DEV_K8S
+    PVC_DEV --> DEPLOY_DEV_K8S
+    DEPLOY_DEV_K8S --> SVC_DEV
+    DEPLOY_DEV_K8S --> HPA_DEV
+    
+    NS_STAGE --> SA_STAGE
+    NS_STAGE --> PVC_STAGE
+    SA_STAGE --> DEPLOY_STAGE_K8S
+    PVC_STAGE --> DEPLOY_STAGE_K8S
+    DEPLOY_STAGE_K8S --> SVC_STAGE
+    DEPLOY_STAGE_K8S --> HPA_STAGE
+    
+    NS_PROD --> SA_PROD
+    NS_PROD --> PVC_PROD
+    SA_PROD --> DEPLOY_PROD_K8S
+    PVC_PROD --> DEPLOY_PROD_K8S
+    DEPLOY_PROD_K8S --> SVC_PROD
+    DEPLOY_PROD_K8S --> HPA_PROD
+    
+    DEPLOY_DEV_K8S --> POD
+    DEPLOY_STAGE_K8S --> POD
+    DEPLOY_PROD_K8S --> POD
+    
+    POD --> HEALTH
+    POD --> JMX
+    POD --> CLEANUP
+    POD --> STORAGE_MOUNT
+    
+    POD --> BOOMI_API
+    JMX --> PROMETHEUS
+    SVC_DEV --> K6_TEST
+    
+    SECRETS --> DEPLOY_DEV_K8S
+    SECRETS --> DEPLOY_STAGE_K8S
+    SECRETS --> DEPLOY_PROD_K8S
+    
+    CONFIG --> DEPLOY_DEV_K8S
+    CONFIG --> DEPLOY_STAGE_K8S
+    CONFIG --> DEPLOY_PROD_K8S
+    
+    YAML_MANIFESTS --> DEPLOY_DEV
+    YAML_MANIFESTS --> DEPLOY_STAGE
+    YAML_MANIFESTS --> DEPLOY_PROD
+    
+    JSONNET --> YAML_MANIFESTS
 ```
 
 ### Architecture Components
 
-- **CI/CD Pipeline**: Automated GitLab-based build, test, and deployment pipeline
-- **Multi-Environment**: Isolated namespaces for dev, staging, and production deployments
-- **Container Runtime**: Boomi Molecule containers with integrated monitoring and health checks
-- **Storage**: Persistent volumes for Boomi runtime data and configurations
-- **Monitoring**: JMX metrics export to Prometheus with Grafana visualization ready
-- **Security**: Service accounts and secrets management for secure operations
+- **Development Workflow**: Git-based development with CI/CD integration
+- **CI/CD Pipeline**: Automated GitLab-based build, test, and deployment pipeline with manual approvals
+- **Multi-Environment**: Isolated Kubernetes namespaces (dev/staging/production) with environment-specific resources
+- **Container Runtime**: Boomi Molecule containers with integrated monitoring, health checks, and autoscaling
+- **Storage**: Persistent volumes for runtime data with 10Gi storage per environment
+- **External Integrations**: Boomi Platform API, Prometheus monitoring, and K6 performance testing
+- **Configuration Management**: Kubernetes secrets, ConfigMaps, YAML manifests, and Jsonnet templates
+- **Security**: Service accounts, secrets management, and secure container configurations
+
+### Architecture Diagram
+
+![Boomi Runtime Template Architecture](docs/diagram-svg.svg)
+
+> 💡 **Interactive Options**: The diagram above is also available as an [interactive SVG](docs/diagram-svg.svg) that you can open directly in your browser for a better viewing experience.
 
 ## Quick Start
 

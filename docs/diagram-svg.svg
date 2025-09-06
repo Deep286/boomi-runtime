@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="800" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title-text { font-family: 'Segoe UI', sans-serif; font-size: 24px; font-weight: bold; fill: #2c3e50; }
+      .section-title { font-family: 'Segoe UI', sans-serif; font-size: 16px; font-weight: bold; fill: #2c3e50; }
+      .component-title { font-family: 'Segoe UI', sans-serif; font-size: 12px; font-weight: bold; fill: #2c3e50; }
+      .component-details { font-family: 'Segoe UI', sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .workflow-bg { fill: #e3f2fd; stroke: #2196f3; stroke-width: 2; }
+      .cicd-bg { fill: #f3e5f5; stroke: #9c27b0; stroke-width: 2; }
+      .dev-bg { fill: #e8f5e8; stroke: #4caf50; stroke-width: 2; }
+      .staging-bg { fill: #fff3e0; stroke: #ff9800; stroke-width: 2; }
+      .prod-bg { fill: #ffebee; stroke: #f44336; stroke-width: 2; }
+      .external-bg { fill: #fffde7; stroke: #ffc107; stroke-width: 2; }
+      .config-bg { fill: #e0f2f1; stroke: #009688; stroke-width: 2; }
+      .component-bg { fill: white; stroke: #ddd; stroke-width: 1; }
+      .arrow { stroke: #3498db; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .flow-arrow { stroke: #e74c3c; stroke-width: 3; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 8,4; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3498db"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="700" y="30" text-anchor="middle" class="title-text">🚀 Boomi Runtime Template Architecture</text>
+  
+  <!-- Development Workflow Section -->
+  <rect x="50" y="60" width="350" height="120" rx="8" class="workflow-bg" filter="url(#shadow)"/>
+  <text x="60" y="80" class="section-title">Development Workflow</text>
+  
+  <!-- Developer -->
+  <rect x="70" y="100" width="80" height="50" rx="4" class="component-bg"/>
+  <text x="110" y="120" text-anchor="middle" class="component-title">👨‍💻 Developer</text>
+  <text x="110" y="135" text-anchor="middle" class="component-details">Code Development</text>
+  <text x="110" y="145" text-anchor="middle" class="component-details">Git Commits</text>
+  
+  <!-- Git Repository -->
+  <rect x="170" y="100" width="80" height="50" rx="4" class="component-bg"/>
+  <text x="210" y="120" text-anchor="middle" class="component-title">📁 Git Repo</text>
+  <text x="210" y="135" text-anchor="middle" class="component-details">boomi-runtime-template</text>
+  <text x="210" y="145" text-anchor="middle" class="component-details">Version Control</text>
+  
+  <!-- CI/CD Pipeline -->
+  <rect x="270" y="100" width="100" height="50" rx="4" class="component-bg"/>
+  <text x="320" y="120" text-anchor="middle" class="component-title">🔄 CI/CD Pipeline</text>
+  <text x="320" y="135" text-anchor="middle" class="component-details">GitLab Automation</text>
+  <text x="320" y="145" text-anchor="middle" class="component-details">Build → Test → Deploy</text>
+  
+  <!-- CI/CD Stages Section -->
+  <rect x="420" y="60" width="550" height="120" rx="8" class="cicd-bg" filter="url(#shadow)"/>
+  <text x="430" y="80" class="section-title">CI/CD Pipeline Stages</text>
+  
+  <!-- Build Stage -->
+  <rect x="440" y="100" width="80" height="50" rx="6" fill="#9c27b0" stroke="none"/>
+  <text x="480" y="120" text-anchor="middle" class="component-title" fill="white">🔨 Build</text>
+  <text x="480" y="135" text-anchor="middle" class="component-details" fill="white">Docker Image</text>
+  <text x="480" y="145" text-anchor="middle" class="component-details" fill="white">Registry Push</text>
+  
+  <!-- Test Stage -->
+  <rect x="540" y="100" width="80" height="50" rx="6" fill="#9c27b0" stroke="none"/>
+  <text x="580" y="120" text-anchor="middle" class="component-title" fill="white">🧪 Test</text>
+  <text x="580" y="135" text-anchor="middle" class="component-details" fill="white">YAML Validation</text>
+  <text x="580" y="145" text-anchor="middle" class="component-details" fill="white">K6 Performance</text>
+  
+  <!-- Deploy Dev -->
+  <rect x="640" y="100" width="80" height="50" rx="6" fill="#4caf50" stroke="none"/>
+  <text x="680" y="120" text-anchor="middle" class="component-title" fill="white">🚀 Dev</text>
+  <text x="680" y="135" text-anchor="middle" class="component-details" fill="white">Manual Approval</text>
+  
+  <!-- Deploy Staging -->
+  <rect x="740" y="100" width="80" height="50" rx="6" fill="#ff9800" stroke="none"/>
+  <text x="780" y="120" text-anchor="middle" class="component-title" fill="white">🎯 Staging</text>
+  <text x="780" y="135" text-anchor="middle" class="component-details" fill="white">Manual Approval</text>
+  
+  <!-- Deploy Production -->
+  <rect x="840" y="100" width="80" height="50" rx="6" fill="#f44336" stroke="none"/>
+  <text x="880" y="120" text-anchor="middle" class="component-title" fill="white">🏭 Production</text>
+  <text x="880" y="135" text-anchor="middle" class="component-details" fill="white">Manual Approval</text>
+  
+  <!-- Development Environment -->
+  <rect x="50" y="220" width="350" height="280" rx="8" class="dev-bg" filter="url(#shadow)"/>
+  <text x="60" y="240" class="section-title">🧪 Development Environment</text>
+  
+  <!-- Dev Namespace -->
+  <ellipse cx="120" cy="270" rx="60" ry="20" class="component-bg"/>
+  <text x="120" y="270" text-anchor="middle" class="component-title">📦 Namespace</text>
+  <text x="120" y="285" text-anchor="middle" class="component-details">boomi-dev</text>
+  
+  <!-- Dev Service Account -->
+  <rect x="200" y="255" width="120" height="25" rx="4" class="component-bg"/>
+  <text x="260" y="270" text-anchor="middle" class="component-title">👤 ServiceAccount</text>
+  <text x="260" y="280" text-anchor="middle" class="component-details">boomi-molecule-dev-sa</text>
+  
+  <!-- Dev PVC -->
+  <ellipse cx="120" cy="320" rx="50" ry="25" class="component-bg"/>
+  <text x="120" y="320" text-anchor="middle" class="component-title">💾 Storage</text>
+  <text x="120" y="335" text-anchor="middle" class="component-details">10Gi PVC</text>
+  
+  <!-- Dev Deployment -->
+  <rect x="200" y="300" width="120" height="60" rx="4" class="component-bg"/>
+  <text x="260" y="315" text-anchor="middle" class="component-title">⚙️ Deployment</text>
+  <text x="260" y="330" text-anchor="middle" class="component-details">1 replica</text>
+  <text x="260" y="340" text-anchor="middle" class="component-details">CPU: 250m-500m</text>
+  <text x="260" y="350" text-anchor="middle" class="component-details">Memory: 2Gi-4Gi</text>
+  
+  <!-- Dev Service -->
+  <ellipse cx="120" cy="400" rx="60" ry="25" class="component-bg"/>
+  <text x="120" y="400" text-anchor="middle" class="component-title">🌐 Service</text>
+  <text x="120" y="415" text-anchor="middle" class="component-details">ClusterIP</text>
+  <text x="120" y="425" text-anchor="middle" class="component-details">80,8080,1099</text>
+  
+  <!-- Dev HPA -->
+  <rect x="200" y="380" width="120" height="40" rx="4" class="component-bg"/>
+  <text x="260" y="395" text-anchor="middle" class="component-title">📈 HPA</text>
+  <text x="260" y="408" text-anchor="middle" class="component-details">Min: 1, Max: 3</text>
+  <text x="260" y="418" text-anchor="middle" class="component-details">CPU: 70%, Mem: 80%</text>
+  
+  <!-- Staging Environment -->
+  <rect x="420" y="220" width="350" height="280" rx="8" class="staging-bg" filter="url(#shadow)"/>
+  <text x="430" y="240" class="section-title">🎯 Staging Environment</text>
+  
+  <!-- Staging Namespace -->
+  <ellipse cx="490" cy="270" rx="70" ry="20" class="component-bg"/>
+  <text x="490" y="270" text-anchor="middle" class="component-title">📦 Namespace</text>
+  <text x="490" y="285" text-anchor="middle" class="component-details">boomi-staging</text>
+  
+  <!-- Staging Deployment -->
+  <rect x="570" y="300" width="130" height="60" rx="4" class="component-bg"/>
+  <text x="635" y="315" text-anchor="middle" class="component-title">⚙️ Deployment</text>
+  <text x="635" y="330" text-anchor="middle" class="component-details">2 replicas</text>
+  <text x="635" y="340" text-anchor="middle" class="component-details">CPU: 500m-1000m</text>
+  <text x="635" y="350" text-anchor="middle" class="component-details">Memory: 4Gi-6Gi</text>
+  
+  <!-- Staging HPA -->
+  <rect x="570" y="380" width="130" height="40" rx="4" class="component-bg"/>
+  <text x="635" y="395" text-anchor="middle" class="component-title">📈 HPA</text>
+  <text x="635" y="408" text-anchor="middle" class="component-details">Min: 2, Max: 5</text>
+  <text x="635" y="418" text-anchor="middle" class="component-details">CPU: 70%, Mem: 80%</text>
+  
+  <!-- Production Environment -->
+  <rect x="790" y="220" width="350" height="280" rx="8" class="prod-bg" filter="url(#shadow)"/>
+  <text x="800" y="240" class="section-title">🏭 Production Environment</text>
+  
+  <!-- Production Namespace -->
+  <ellipse cx="860" cy="270" rx="80" ry="20" class="component-bg"/>
+  <text x="860" y="270" text-anchor="middle" class="component-title">📦 Namespace</text>
+  <text x="860" y="285" text-anchor="middle" class="component-details">boomi-production</text>
+  
+  <!-- Production Deployment -->
+  <rect x="970" y="300" width="140" height="60" rx="4" class="component-bg"/>
+  <text x="1040" y="315" text-anchor="middle" class="component-title">⚙️ Deployment</text>
+  <text x="1040" y="330" text-anchor="middle" class="component-details">3 replicas</text>
+  <text x="1040" y="340" text-anchor="middle" class="component-details">CPU: 1000m-2000m</text>
+  <text x="1040" y="350" text-anchor="middle" class="component-details">Memory: 8Gi-12Gi</text>
+  
+  <!-- Production HPA -->
+  <rect x="970" y="380" width="140" height="40" rx="4" class="component-bg"/>
+  <text x="1040" y="395" text-anchor="middle" class="component-title">📈 HPA</text>
+  <text x="1040" y="408" text-anchor="middle" class="component-details">Min: 3, Max: 10</text>
+  <text x="1040" y="418" text-anchor="middle" class="component-details">CPU: 70%, Mem: 80%</text>
+  
+  <!-- External Integrations -->
+  <rect x="50" y="530" width="400" height="120" rx="8" class="external-bg" filter="url(#shadow)"/>
+  <text x="60" y="550" class="section-title">🌐 External Integrations</text>
+  
+  <!-- Boomi API -->
+  <rect x="70" y="570" width="100" height="60" rx="4" class="component-bg"/>
+  <text x="120" y="590" text-anchor="middle" class="component-title">☁️ Boomi API</text>
+  <text x="120" y="605" text-anchor="middle" class="component-details">api.boomi.com</text>
+  <text x="120" y="615" text-anchor="middle" class="component-details">Process Deployment</text>
+  
+  <!-- Monitoring -->
+  <rect x="190" y="570" width="100" height="60" rx="4" class="component-bg"/>
+  <text x="240" y="590" text-anchor="middle" class="component-title">📊 Monitoring</text>
+  <text x="240" y="605" text-anchor="middle" class="component-details">Prometheus</text>
+  <text x="240" y="615" text-anchor="middle" class="component-details">Grafana Dashboard</text>
+  
+  <!-- K6 Testing -->
+  <rect x="310" y="570" width="100" height="60" rx="4" class="component-bg"/>
+  <text x="360" y="590" text-anchor="middle" class="component-title">🧪 K6 Testing</text>
+  <text x="360" y="605" text-anchor="middle" class="component-details">Performance</text>
+  <text x="360" y="615" text-anchor="middle" class="component-details">Health Validation</text>
+  
+  <!-- Configuration Management -->
+  <rect x="470" y="530" width="400" height="120" rx="8" class="config-bg" filter="url(#shadow)"/>
+  <text x="480" y="550" class="section-title">⚙️ Configuration Management</text>
+  
+  <!-- Secrets -->
+  <rect x="490" y="570" width="100" height="60" rx="4" class="component-bg"/>
+  <text x="540" y="585" text-anchor="middle" class="component-title">🔐 Secrets</text>
+  <text x="540" y="600" text-anchor="middle" class="component-details">BOOMI_ACCOUNTID</text>
+  <text x="540" y="610" text-anchor="middle" class="component-details">BOOMI_ATOMNAME</text>
+  <text x="540" y="620" text-anchor="middle" class="component-details">INSTALL_TOKEN</text>
+  
+  <!-- ConfigMaps -->
+  <rect x="610" y="570" width="100" height="60" rx="4" class="component-bg"/>
+  <text x="660" y="585" text-anchor="middle" class="component-title">📋 ConfigMaps</text>
+  <text x="660" y="600" text-anchor="middle" class="component-details">JMX Configuration</text>
+  <text x="660" y="610" text-anchor="middle" class="component-details">App Settings</text>
+  
+  <!-- YAML/Jsonnet -->
+  <rect x="730" y="570" width="110" height="60" rx="4" class="component-bg"/>
+  <text x="785" y="585" text-anchor="middle" class="component-title">📄 YAML/Jsonnet</text>
+  <text x="785" y="600" text-anchor="middle" class="component-details">Ready-to-Deploy</text>
+  <text x="785" y="610" text-anchor="middle" class="component-details">Environment Specific</text>
+  <text x="785" y="620" text-anchor="middle" class="component-details">Dynamic Generation</text>
+  
+  <!-- Flow Arrows -->
+  <path d="M 150 125 Q 170 125 190 125" class="arrow"/>
+  <path d="M 250 125 Q 270 125 290 125" class="arrow"/>
+  <path d="M 370 125 Q 390 125 420 125" class="arrow"/>
+  <path d="M 520 125 Q 530 125 540 125" class="flow-arrow"/>
+  <path d="M 620 125 Q 630 125 640 125" class="flow-arrow"/>
+  <path d="M 680 150 Q 680 170 225 200" class="flow-arrow"/>
+  <path d="M 780 150 Q 780 170 595 200" class="flow-arrow"/>
+  <path d="M 880 150 Q 880 170 965 200" class="flow-arrow"/>
+  
+  <!-- Configuration connections -->
+  <path d="M 540 570 Q 540 450 260 380" class="arrow" stroke-dasharray="4,4"/>
+  <path d="M 660 570 Q 660 450 260 380" class="arrow" stroke-dasharray="4,4"/>
+  <path d="M 260 360 Q 120 400 120 570" class="arrow" stroke="#4caf50"/>
+  <path d="M 260 360 Q 240 400 240 570" class="arrow" stroke="#4caf50"/>
+  
+  <!-- Legend -->
+  <g transform="translate(1180, 60)">
+    <rect x="0" y="0" width="180" height="120" rx="6" fill="white" stroke="#ddd" stroke-width="1" filter="url(#shadow)"/>
+    <text x="10" y="20" class="section-title">Legend</text>
+    
+    <rect x="10" y="30" width="20" height="15" rx="2" class="dev-bg"/>
+    <text x="35" y="42" class="component-details">Development</text>
+    
+    <rect x="10" y="50" width="20" height="15" rx="2" class="staging-bg"/>
+    <text x="35" y="62" class="component-details">Staging</text>
+    
+    <rect x="10" y="70" width="20" height="15" rx="2" class="prod-bg"/>
+    <text x="35" y="82" class="component-details">Production</text>
+    
+    <rect x="10" y="90" width="20" height="15" rx="2" class="cicd-bg"/>
+    <text x="35" y="102" class="component-details">CI/CD Pipeline</text>
+  </g>
+</svg>
