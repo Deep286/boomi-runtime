@@ -1,0 +1,11 @@
+{
+  "apiVersion": "tanka.dev/v1alpha1",
+  "kind": "Environment",
+  "metadata": {
+    "name": "staging"
+  },
+  "spec": {
+    "apiServer": "https://your-kubernetes-api-server",
+    "namespace": "boomi-staging"
+  }
+}

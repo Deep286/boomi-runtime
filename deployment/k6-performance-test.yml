@@ -1,0 +1,29 @@
+apiVersion: k6.io/v1alpha1
+kind: K6
+metadata:
+  name: boomi-performance-test
+  namespace: boomi-dev
+  labels:
+    app.kubernetes.io/name: boomi-performance-test
+    app.kubernetes.io/component: testing
+spec:
+  parallelism: 5
+  script:
+    configMap:
+      name: boomi-performance-test-script
+      file: performance_test.js
+  runner:
+    metadata:
+      labels:
+        app.kubernetes.io/name: boomi-performance-test
+        app.kubernetes.io/component: test-runner
+    resources:
+      limits:
+        memory: 128Mi
+        cpu: 100m
+      requests:
+        cpu: 50m
+        memory: 64Mi
+    env:
+    - name: BASE_URL
+      value: "http://boomi-molecule-dev.boomi-dev.svc.cluster.local"

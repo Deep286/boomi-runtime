@@ -1,0 +1,95 @@
+# Simple GitLab CI/CD Pipeline for Boomi Runtime
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  LATEST_IMAGE: "$CI_REGISTRY_IMAGE:latest"
+
+# Build Docker image
+build:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - cd docker
+    - docker build -t $IMAGE_NAME .
+    - docker tag $IMAGE_NAME $LATEST_IMAGE
+    - docker push $IMAGE_NAME
+    - docker push $LATEST_IMAGE
+  only:
+    - main
+    - develop
+
+# Validate Kubernetes manifests
+validate:
+  stage: test
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl --dry-run=client -f deployment/environments/dev/ validate
+    - kubectl --dry-run=client -f deployment/k6-performance-test.yml validate
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# Run performance tests
+performance-test:
+  stage: test
+  image: grafana/k6:latest
+  script:
+    - k6 run scripts/performance_test.js
+  variables:
+    BASE_URL: "http://localhost:9090"
+  allow_failure: true
+  only:
+    - main
+    - develop
+
+# Deploy to development
+deploy-dev:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f deployment/environments/dev/
+  environment:
+    name: development
+    url: https://boomi-dev.your-domain.com
+  when: manual
+  only:
+    - develop
+
+# Deploy to staging
+deploy-staging:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f deployment/environments/staging/
+  environment:
+    name: staging
+    url: https://boomi-staging.your-domain.com
+  when: manual
+  only:
+    - main
+
+# Deploy to production
+deploy-prod:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f deployment/environments/production/
+  environment:
+    name: production
+    url: https://boomi-prod.your-domain.com
+  when: manual
+  only:
+    - main
+  needs:
+    - deploy-staging
