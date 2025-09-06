@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: boomi-molecule-staging
+  namespace: boomi-staging
+  labels:
+    app.kubernetes.io/name: boomi-molecule-staging
+    app.kubernetes.io/component: service
+spec:
+  selector:
+    app.kubernetes.io/name: boomi-molecule-staging
+  ports:
+    - port: 80
+      targetPort: 9090
+      name: http
+    - port: 8080
+      targetPort: 8080
+      name: web
+    - port: 1099
+      targetPort: 1099
+      name: jmx
+  type: ClusterIP

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: boomi-staging
+  labels:
+    app.kubernetes.io/name: boomi-molecule-staging
+    app.kubernetes.io/component: namespace

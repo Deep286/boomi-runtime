@@ -142,9 +142,14 @@ graph TB
      -n boomi-runtime
    ```
 
-4. **Deploy to development**:
+4. **Deploy to development** (using YAML manifests):
    ```bash
-   kubectl apply -f deployment/environments/dev/
+   kubectl apply -f deployment/yaml/dev/
+   ```
+
+   **Alternative: Using Jsonnet** (requires jsonnet CLI):
+   ```bash
+   jsonnet deployment/environments/dev/main.jsonnet | kubectl apply -f -
    ```
 
 ## Project Structure
@@ -157,11 +162,16 @@ boomi-runtime-template/
 │   ├── jmx-config.yaml             # JMX monitoring config
 │   └── template-values.yml         # Basic configuration
 ├── deployment/
-│   ├── environments/               # Environment-specific configs
+│   ├── environments/               # Environment-specific configs (Jsonnet)
 │   │   ├── default/               # Base configuration
 │   │   ├── dev/                   # Development environment
 │   │   ├── staging/               # Staging environment
 │   │   └── production/            # Production environment
+│   ├── yaml/                      # Ready-to-use Kubernetes YAML manifests
+│   │   ├── default/               # Base YAML manifests
+│   │   ├── dev/                   # Development YAML manifests
+│   │   ├── staging/               # Staging YAML manifests
+│   │   └── production/            # Production YAML manifests
 │   ├── jsonnetfile.json           # Jsonnet dependencies
 │   └── k6-performance-test.yml    # Performance testing
 ├── docker/
@@ -205,6 +215,26 @@ Each environment can override the base configuration:
 - **Staging**: Production-like with 2 replicas
 - **Production**: Full resources with 3 replicas
 
+## Deployment Options
+
+The template provides two deployment approaches:
+
+### Option 1: Ready-to-Use YAML Manifests (Recommended)
+
+Pre-generated Kubernetes YAML files are available in the `deployment/yaml/` directory. These are ready to deploy without any additional tools:
+
+- **Pros**: No dependencies, direct deployment, easy to customize
+- **Cons**: Manual updates needed when changing configurations
+- **Use Case**: Quick deployments, teams unfamiliar with Jsonnet
+
+### Option 2: Jsonnet Configuration (Advanced)
+
+Dynamic configuration generation using Jsonnet templates in `deployment/environments/`:
+
+- **Pros**: DRY configuration, programmatic generation, easier maintenance
+- **Cons**: Requires Jsonnet CLI tool, learning curve
+- **Use Case**: Large-scale deployments, configuration as code
+
 ## Deployment
 
 ### Prerequisites
@@ -228,16 +258,28 @@ Each environment can override the base configuration:
    # Create secrets as shown in Quick Start
    ```
 
-3. **Deploy environment**:
+3. **Deploy environment** (using YAML manifests):
    ```bash
    # Development
-   kubectl apply -f deployment/environments/dev/
+   kubectl apply -f deployment/yaml/dev/
 
-   # Staging
-   kubectl apply -f deployment/environments/staging/
+   # Staging  
+   kubectl apply -f deployment/yaml/staging/
 
    # Production
-   kubectl apply -f deployment/environments/production/
+   kubectl apply -f deployment/yaml/production/
+   ```
+
+   **Alternative: Using Jsonnet** (requires jsonnet CLI):
+   ```bash
+   # Development
+   jsonnet deployment/environments/dev/main.jsonnet | kubectl apply -f -
+
+   # Staging
+   jsonnet deployment/environments/staging/main.jsonnet | kubectl apply -f -
+
+   # Production
+   jsonnet deployment/environments/production/main.jsonnet | kubectl apply -f -
    ```
 
 ### Verification
@@ -318,3 +360,7 @@ kubectl get secrets boomi-secrets -n boomi-runtime -o yaml
 - **Documentation**: See `docs/deployment-guide.md` for detailed instructions
 - **Issues**: Check pod logs and Kubernetes events first
 - **Configuration**: All settings are in standard Kubernetes manifests
+
+## License
+
+This template is provided as-is for organizational use.
