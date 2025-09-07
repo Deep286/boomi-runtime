@@ -1,10 +1,10 @@
-# Boomi Runtime Template
+# Boomi Runtime
 
-A simplified Kubernetes deployment template for Boomi Molecule runtime environments.
+A simplified Kubernetes deployment for Boomi Molecule runtime environments.
 
 ## Overview
 
-This template provides a clean, minimal deployment solution for Boomi Molecule runtime environments on Kubernetes with basic monitoring and automation capabilities.
+This provides a clean, minimal deployment solution for Boomi Molecule runtime environments on Kubernetes with basic monitoring and automation capabilities.
 
 ### Key Features
 
@@ -17,7 +17,7 @@ This template provides a clean, minimal deployment solution for Boomi Molecule r
 
 ### Architecture Diagram
 
-![Boomi Runtime Template Architecture](docs/diagram-svg.svg)
+![Boomi Runtime Architecture](docs/diagram-svg.svg)
 
 > 💡 **Interactive Options**: The diagram above is also available as an [interactive SVG](docs/diagram-svg.svg) that you can open directly in your browser for a better viewing experience.
 
@@ -38,7 +38,7 @@ This template provides a clean, minimal deployment solution for Boomi Molecule r
 
 1. **Clone the template**:
    ```bash
-   # Copy the template to your project
+   # Copy to your project
    cp -r boomi-runtime-template/ my-boomi-project/
    cd my-boomi-project/
    ```
@@ -138,7 +138,7 @@ Each environment can override the base configuration:
 
 ## Deployment Options
 
-The template provides two deployment approaches:
+The repo provides two deployment approaches:
 
 ### Option 1: Ready-to-Use YAML Manifests (Recommended)
 
@@ -281,7 +281,3 @@ kubectl get secrets boomi-secrets -n boomi-runtime -o yaml
 - **Documentation**: See `docs/deployment-guide.md` for detailed instructions
 - **Issues**: Check pod logs and Kubernetes events first
 - **Configuration**: All settings are in standard Kubernetes manifests
-
-## License
-
-This template is provided as-is for organizational use.
